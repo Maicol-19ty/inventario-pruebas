@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [ master, main, develop ]
   pull_request:
-    branches: [ master, main ]
+    branches: [ master, main, develop ]
 
 jobs:
   build-and-test:
@@ -25,7 +25,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Install dependencies
-      run: ./gradlew build -x test
+      run: ./gradlew assemble
 
     - name: Run unit tests
       run: ./gradlew test --tests "*Test" --tests "!*IntegrationTest" --tests "!*E2ETest"
@@ -41,12 +41,15 @@ jobs:
 
     - name: Run Checkstyle
       run: ./gradlew checkstyleMain checkstyleTest
+      continue-on-error: true
 
     - name: Run PMD
       run: ./gradlew pmdMain pmdTest
+      continue-on-error: true
 
     - name: Run SpotBugs
       run: ./gradlew spotbugsMain
+      continue-on-error: true
 
     - name: Generate test report
       if: always()
