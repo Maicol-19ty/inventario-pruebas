@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ master, main, develop ]
 
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -28,7 +33,7 @@ jobs:
       run: ./gradlew assemble
 
     - name: Run unit tests
-      run: ./gradlew test --tests "*Test" --tests "!*IntegrationTest" --tests "!*E2ETest"
+      run: ./gradlew test --tests "*ServiceTest" --tests "*ControllerTest" --tests "InventarioPruebasApplicationTests"
 
     - name: Run integration tests
       run: ./gradlew test --tests "*IntegrationTest"
